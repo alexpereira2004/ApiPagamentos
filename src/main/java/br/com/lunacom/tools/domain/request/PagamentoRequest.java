@@ -1,4 +1,4 @@
-package br.com.lunacom.tools.domain.pagamento;
+package br.com.lunacom.tools.domain.request;
 
 import br.com.lunacom.tools.domain.FormaPagamento;
 import br.com.lunacom.tools.domain.Transacao;
