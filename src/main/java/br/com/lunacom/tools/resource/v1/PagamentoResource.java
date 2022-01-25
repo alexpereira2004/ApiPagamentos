@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
 import java.net.URI;
 
 @RequiredArgsConstructor
@@ -45,9 +44,7 @@ public class PagamentoResource {
     }
 
     @PatchMapping("/{id}/estorno")
-    public ResponseEntity<PagamentoResponse> estornar(
-            @PathVariable @NotEmpty(message = "Informe o ID") String id) {
-
+    public ResponseEntity<PagamentoResponse> estornar(@PathVariable String id) {
         PagamentoEntity entity = service.estornar(Long.valueOf(id));
         final PagamentoResponse response = pagamentoEntityToResponseConverter
                 .encode(entity);
