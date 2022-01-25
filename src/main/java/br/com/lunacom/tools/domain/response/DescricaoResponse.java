@@ -1,12 +1,12 @@
-package br.com.lunacom.tools.domain;
+package br.com.lunacom.tools.domain.response;
 
 import br.com.lunacom.tools.domain.enumeration.StatusEnum;
+import lombok.Data;
 
-import java.time.LocalDateTime;
-
-public class Descricao {
+@Data
+public class DescricaoResponse {
     private String valor;
-    LocalDateTime dataHora;
+    private String dataHora;
     private String estabelecimento;
     private String nsu;
     private String codigoAutorizacao;
