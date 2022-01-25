@@ -2,6 +2,7 @@ package br.com.lunacom.tools.domain.request;
 
 import lombok.Data;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -11,6 +12,8 @@ public class TransacaoRequest {
     private String cartao;
     @NotNull(message = "Informe o ID")
     private String id;
+    @Valid
     private DescricaoRequest descricao;
+    @Valid
     private FormaPagamentoRequest formaPagamento;
 }
