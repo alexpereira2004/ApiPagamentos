@@ -11,13 +11,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 import java.net.URI;
 
 @RequiredArgsConstructor
@@ -32,7 +30,7 @@ public class PagamentoResource {
 
 
     @PostMapping
-    public ResponseEntity<PagamentoResponse> create(@RequestBody @Valid PagamentoRequest request) {
+    public ResponseEntity<PagamentoResponse> criar(@RequestBody @Valid PagamentoRequest request) {
         final PagamentoEntity pagamentoEntity = modelMapper.map(request.getTransacao(), PagamentoEntity.class);
 
         PagamentoEntity entityResponse = service.salvar(pagamentoEntity);
@@ -43,6 +41,16 @@ public class PagamentoResource {
 
         final PagamentoResponse response = pagamentoEntityToResponseConverter
                 .encode(entityResponse);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @PatchMapping("/{id}/estorno")
+    public ResponseEntity<PagamentoResponse> estornar(
+            @PathVariable @NotEmpty(message = "Informe o ID") String id) {
+
+        PagamentoEntity entity = service.estornar(Long.valueOf(id));
+        final PagamentoResponse response = pagamentoEntityToResponseConverter
+                .encode(entity);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }
