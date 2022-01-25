@@ -10,4 +10,6 @@ class ToolsApplicationTests {
     void contextLoads() {
     }
 
+    //Testar se insere dois pagamentos com IDs iguais
+
 }
