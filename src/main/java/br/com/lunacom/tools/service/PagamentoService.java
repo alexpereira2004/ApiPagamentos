@@ -35,4 +35,9 @@ public class PagamentoService {
         pagamentoEntity.getDescricao().setStatus(StatusEnum.CANCELADO);
         return pagamentoEntity;
     }
+
+    public Optional<PagamentoEntity> pesquisarPorId(Long id) {
+        return repository.findById(id);
+    }
+
 }

@@ -15,7 +15,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotEmpty;
 import java.net.URI;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
@@ -49,5 +53,15 @@ public class PagamentoResource {
         final PagamentoResponse response = pagamentoEntityToResponseConverter
                 .encode(entity);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @GetMapping(value="/{id}")
+    public ResponseEntity<PagamentoResponse> pesquisarPorId (@Valid @PathVariable @NotEmpty
+                                                                          @Digits(integer = 16, fraction = 0, message = "Valor informado como ID não é válido") String id) {
+        final Optional<PagamentoEntity> optional = service.pesquisarPorId(Long.valueOf(id));
+        final PagamentoEntity entity = optional.orElseThrow(NoSuchElementException::new);
+        final PagamentoResponse response = pagamentoEntityToResponseConverter
+                .encode(entity);
+        return ResponseEntity.ok(response);
     }
 }
