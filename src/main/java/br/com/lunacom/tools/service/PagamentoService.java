@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.ws.rs.NotFoundException;
+import java.util.List;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -40,4 +41,7 @@ public class PagamentoService {
         return repository.findById(id);
     }
 
+    public List<PagamentoEntity> pesquisarTodos() {
+        return repository.findAll();
+    }
 }

@@ -18,6 +18,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotEmpty;
 import java.net.URI;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -63,5 +64,13 @@ public class PagamentoResource {
         final PagamentoResponse response = pagamentoEntityToResponseConverter
                 .encode(entity);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<PagamentoResponse>> pesquisarTodos () {
+        List<PagamentoEntity> pagamentoEntities = service.pesquisarTodos();
+        List<PagamentoResponse> responseList = pagamentoEntityToResponseConverter
+                .encode(pagamentoEntities);
+        return ResponseEntity.ok(responseList);
     }
 }
