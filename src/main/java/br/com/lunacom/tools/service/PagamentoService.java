@@ -2,8 +2,8 @@ package br.com.lunacom.tools.service;
 
 import br.com.lunacom.tools.domain.entity.PagamentoEntity;
 import br.com.lunacom.tools.domain.enumeration.StatusEnum;
+import br.com.lunacom.tools.repository.DescricaoRepository;
 import br.com.lunacom.tools.repository.PagamentoRepository;
-import br.com.lunacom.tools.resource.v1.DescricaoRepository;
 import br.com.lunacom.tools.util.RandomData;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

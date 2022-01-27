@@ -1,4 +1,4 @@
-package br.com.lunacom.tools.resource.v1;
+package br.com.lunacom.tools.repository;
 
 import br.com.lunacom.tools.domain.entity.DescricaoEntity;
 import br.com.lunacom.tools.domain.enumeration.StatusEnum;
