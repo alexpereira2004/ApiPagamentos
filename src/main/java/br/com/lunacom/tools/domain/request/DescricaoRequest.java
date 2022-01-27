@@ -1,12 +1,18 @@
 package br.com.lunacom.tools.domain.request;
 
 import br.com.lunacom.tools.domain.enumeration.StatusEnum;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 
+@Builder
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class DescricaoRequest {
     @NotEmpty(message = "Informe o valor")
     private String valor;

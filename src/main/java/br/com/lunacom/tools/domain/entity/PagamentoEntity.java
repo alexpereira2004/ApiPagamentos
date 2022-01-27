@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Builder
 @Entity
@@ -26,4 +27,17 @@ public class PagamentoEntity implements Serializable {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "forma_pagamento_id")
     private FormaPagamentoEntity formaPagamento;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PagamentoEntity entity = (PagamentoEntity) o;
+        return Objects.equals(id, entity.id) && Objects.equals(cartao, entity.cartao) && Objects.equals(descricao, entity.descricao) && Objects.equals(formaPagamento, entity.formaPagamento);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, cartao, descricao, formaPagamento);
+    }
 }
