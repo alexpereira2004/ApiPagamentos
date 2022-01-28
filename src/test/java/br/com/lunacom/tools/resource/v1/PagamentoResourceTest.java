@@ -84,14 +84,11 @@ public class PagamentoResourceTest {
             .andExpect(jsonPath("$.transacao.formaPagamento.parcelas").value(5));
     }
 
-
     @Test
     @DisplayName("Deve lançar erro de validação")
     public void erroValidacao() throws Exception {
-
         String json = JsonLoader.getContentFromFile(JSON_PAGAMENTO_REQUEST_SEM_ATRIBUTOS);
         MockHttpServletRequestBuilder request = Comuns.getMockHttpServletRequestBuilder(URL, json);
-
         mvc
                 .perform(request)
                 .andExpect(status().isUnprocessableEntity())
@@ -102,8 +99,7 @@ public class PagamentoResourceTest {
                 .andExpect(jsonPath("$.detalhe[3]").value("Informe o estabelecimento"))
                 .andExpect(jsonPath("$.detalhe[4]").value("Informe o número do cartão"))
                 .andExpect(jsonPath("$.detalhe[5]").value("Informe o tipo"))
-                .andExpect(jsonPath("$.detalhe[6]").value("Informe o valor"))
-        ;
+                .andExpect(jsonPath("$.detalhe[6]").value("Informe o valor"));
 
     }
 }
