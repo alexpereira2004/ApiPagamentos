@@ -114,8 +114,55 @@ public class PagamentoResourceTest {
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(jsonPath("$.mensagem").value("Verifique os seguintes itens antes de avançar"))
                 .andExpect(jsonPath("$.detalhe[0]").value("Objeto Descricao deve ser informado"))
-                .andExpect(jsonPath("$.detalhe[1]").value("Objeto FormaPagamento deve ser informado"))
-        ;
+                .andExpect(jsonPath("$.detalhe[1]").value("Objeto FormaPagamento deve ser informado"));
+    }
+
+    @Test
+    @DisplayName("Deve impedir um pagamento para um ID já existente")
+    public void impedirPagamentoDuplicadoPorId() throws Exception {
+
+    }
+
+    @Test
+    @DisplayName("Deve impedir que seja informada Data e Hora diferente do padrão dd/MM/yyyy H:mm:ss")
+    public void validarPadraoDeDataHora() throws Exception {
+
+    }
+
+    @Test
+    @DisplayName("Deve impedir que seja informada o campo Tipo (FormaPagamento.tipo) com valores diferentes dos possíveis")
+    public void validarValoresPossiveisFormaPagamentoTipo() throws Exception {
+
+    }
+
+    @Test
+    @DisplayName("Deve realizar um estorno com sucesso")
+    public void estornarComSucesso() throws Exception {
+
+    }
+
+    @Test
+    @DisplayName("Deve lançar uma exceção quando o pagamento não for localizado")
+    public void lancarExcecaoPorPagamentoNaoLocalizado() throws Exception {
+
+    }
+
+    @Test
+    @DisplayName("Deve pesquisar por ID com sucesso")
+    public void pesquisarPorId() throws Exception {
+
+    }
+
+    @Test
+    @DisplayName("Deve retornar No Content Quanto pesquisa por ID não encontrar registro")
+    public void deveRetornarNoContentQuandoIdNaoForEncontrado() throws Exception {
+
+    }
+
+    @Test
+    @DisplayName("Deve retornar uma lista de Pagamentos ao consultar por Todos")
+    public void deveRetornarUmaListaDePagamentos() throws Exception {
+
     }
 
 }
