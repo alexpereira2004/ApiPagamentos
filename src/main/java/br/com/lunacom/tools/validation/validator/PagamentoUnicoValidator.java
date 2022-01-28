@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+import java.util.Objects;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -20,6 +21,9 @@ public class PagamentoUnicoValidator implements ConstraintValidator<PagamentoUni
    }
 
    public boolean isValid(String valor, ConstraintValidatorContext context) {
+      if (Objects.isNull(valor)) {
+         return true;
+      }
       Optional<PagamentoEntity> list = repository.findById(Long.valueOf(valor));
       return list.isEmpty();
    }
