@@ -13,6 +13,7 @@ import builder.PagamentoResponseBuilder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -49,6 +50,7 @@ public class PagamentoResourceTest {
     private ObjectMapper objectMapper;
     private final String JSON_PAGAMENTO_REQUEST_SEM_ATRIBUTOS = "PagamentoRequestSemAtributos.json";
     private final String JSON_PAGAMENTO_REQUEST_SEM_OBJETOS = "PagamentoRequestSemObjetos.json";
+    private final String JSON_FORMA_PAGAMENTO_NAO_EXISTENTE = "PagamentoRequestFormaPagamentoTipoInvalido.json";
 
     @MockBean
     PagamentoEntityToResponseConverter pagamentoEntityToResponseConverter;
@@ -160,7 +162,14 @@ public class PagamentoResourceTest {
     @Test
     @DisplayName("Deve impedir que seja informada o campo Tipo (FormaPagamento.tipo) com valores diferentes dos possíveis")
     public void validarValoresPossiveisFormaPagamentoTipo() throws Exception {
+        String json = JsonLoader.getContentFromFile(JSON_FORMA_PAGAMENTO_NAO_EXISTENTE);
 
+        MockHttpServletRequestBuilder request = Comuns.getMockHttpServletRequestBuilder(URL, json);
+
+        mvc
+                .perform(request)
+                .andExpect(status().isPreconditionFailed())
+                .andExpect(jsonPath("$.mensagem", Matchers.containsString("É necessário revisar a requisição")));
     }
 
     @Test

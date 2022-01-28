@@ -1,0 +1,15 @@
+{
+  "transacao": {
+    "cartao": "4444555566661234",
+    "id" : "1000235689000005",
+    "descricao": {
+      "valor" : "500.00",
+      "dataHora": "01/05/2021 18:30:00",
+      "estabelecimento": "Pet Shop do Adão"
+    },
+    "formaPagamento": {
+      "tipo": "COMPOSTO",
+      "parcelas": 1
+    }
+  }
+}
