@@ -3,6 +3,7 @@ package br.com.lunacom.tools.resource.v1;
 import br.com.lunacom.tools.converter.PagamentoEntityToResponseConverter;
 import br.com.lunacom.tools.domain.entity.PagamentoEntity;
 import br.com.lunacom.tools.domain.request.PagamentoRequest;
+import br.com.lunacom.tools.repository.PagamentoRepository;
 import br.com.lunacom.tools.service.PagamentoService;
 import br.com.lunacom.tools.util.Comuns;
 import br.com.lunacom.tools.util.JsonLoader;
@@ -25,6 +26,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
 
 import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.given;
@@ -52,6 +54,8 @@ public class PagamentoResourceTest {
     PagamentoEntityToResponseConverter pagamentoEntityToResponseConverter;
     @MockBean
     PagamentoService service;
+    @MockBean
+    PagamentoRepository repository;
 
     @BeforeEach
     public void setUp() {
@@ -120,7 +124,19 @@ public class PagamentoResourceTest {
     @Test
     @DisplayName("Deve impedir um pagamento para um ID já existente")
     public void impedirPagamentoDuplicadoPorId() throws Exception {
+        PagamentoRequest pagamentoRequest = PagamentoRequestBuilder.umPagamento().agora();
+        PagamentoEntity entity = PagamentoEntityBuilder.umPagamento().agora();
+        String json = objectMapper.writeValueAsString(pagamentoRequest);
+        given(repository.findById(any(Long.class)))
+                .willReturn(Optional.of(entity));
 
+        MockHttpServletRequestBuilder request = Comuns.getMockHttpServletRequestBuilder(URL, json);
+
+        mvc
+                .perform(request)
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(jsonPath("$.mensagem").value("Verifique os seguintes itens antes de avançar"))
+                .andExpect(jsonPath("$.detalhe[0]").value("O Pagamento informado já existe no sistema"));
     }
 
     @Test
