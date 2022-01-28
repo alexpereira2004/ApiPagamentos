@@ -5,6 +5,7 @@ import br.com.lunacom.tools.domain.entity.PagamentoEntity;
 import br.com.lunacom.tools.domain.request.PagamentoRequest;
 import br.com.lunacom.tools.service.PagamentoService;
 import br.com.lunacom.tools.util.Comuns;
+import br.com.lunacom.tools.util.JsonLoader;
 import builder.PagamentoEntityBuilder;
 import builder.PagamentoRequestBuilder;
 import builder.PagamentoResponseBuilder;
@@ -44,6 +45,7 @@ public class PagamentoResourceTest {
 
     static final String URL = "/v1/pagamento/";
     private ObjectMapper objectMapper;
+    private final String JSON_PAGAMENTO_REQUEST_SEM_ATRIBUTOS = "PagamentoRequestSemAtributos.json";
 
     @MockBean
     PagamentoEntityToResponseConverter pagamentoEntityToResponseConverter;
@@ -80,8 +82,28 @@ public class PagamentoResourceTest {
             .andExpect(jsonPath("$.transacao.descricao.estabelecimento").value("Colégio Pinho"))
             .andExpect(jsonPath("$.transacao.formaPagamento.tipo").value("AVISTA"))
             .andExpect(jsonPath("$.transacao.formaPagamento.parcelas").value(5));
-
     }
 
 
+    @Test
+    @DisplayName("Deve lançar erro de validação")
+    public void erroValidacao() throws Exception {
+
+        String json = JsonLoader.getContentFromFile(JSON_PAGAMENTO_REQUEST_SEM_ATRIBUTOS);
+        MockHttpServletRequestBuilder request = Comuns.getMockHttpServletRequestBuilder(URL, json);
+
+        mvc
+                .perform(request)
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(jsonPath("$.mensagem").value("Verifique os seguintes itens antes de avançar"))
+                .andExpect(jsonPath("$.detalhe[0]").value("Informe a data e hora"))
+                .andExpect(jsonPath("$.detalhe[1]").value("Informe a quantidade de parcelas"))
+                .andExpect(jsonPath("$.detalhe[2]").value("Informe o ID"))
+                .andExpect(jsonPath("$.detalhe[3]").value("Informe o estabelecimento"))
+                .andExpect(jsonPath("$.detalhe[4]").value("Informe o número do cartão"))
+                .andExpect(jsonPath("$.detalhe[5]").value("Informe o tipo"))
+                .andExpect(jsonPath("$.detalhe[6]").value("Informe o valor"))
+        ;
+
+    }
 }
