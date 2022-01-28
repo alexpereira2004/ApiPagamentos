@@ -17,11 +17,13 @@ import javax.validation.constraints.NotNull;
 public class TransacaoRequest {
     @NotEmpty(message = "Informe o número do cartão")
     private String cartao;
+    @NotEmpty(message = "Informe o ID")
     @PagamentoUnico
-    @NotNull(message = "Informe o ID")
     private String id;
     @Valid
+    @NotNull(message = "Objeto Descricao deve ser informado")
     private DescricaoRequest descricao;
     @Valid
+    @NotNull(message = "Objeto FormaPagamento deve ser informado")
     private FormaPagamentoRequest formaPagamento;
 }
