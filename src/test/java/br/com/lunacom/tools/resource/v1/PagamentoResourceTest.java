@@ -46,6 +46,7 @@ public class PagamentoResourceTest {
     static final String URL = "/v1/pagamento/";
     private ObjectMapper objectMapper;
     private final String JSON_PAGAMENTO_REQUEST_SEM_ATRIBUTOS = "PagamentoRequestSemAtributos.json";
+    private final String JSON_PAGAMENTO_REQUEST_SEM_OBJETOS = "PagamentoRequestSemObjetos.json";
 
     @MockBean
     PagamentoEntityToResponseConverter pagamentoEntityToResponseConverter;
@@ -102,4 +103,19 @@ public class PagamentoResourceTest {
                 .andExpect(jsonPath("$.detalhe[6]").value("Informe o valor"));
 
     }
+
+    @Test
+    @DisplayName("Deve lançar erro de validação quando recebe uma request sem objetos Descricao e FormaPagamento")
+    public void erroValidacaoRequestSemObjetos() throws Exception {
+        String json = JsonLoader.getContentFromFile(JSON_PAGAMENTO_REQUEST_SEM_OBJETOS);
+        MockHttpServletRequestBuilder request = Comuns.getMockHttpServletRequestBuilder(URL, json);
+        mvc
+                .perform(request)
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(jsonPath("$.mensagem").value("Verifique os seguintes itens antes de avançar"))
+                .andExpect(jsonPath("$.detalhe[0]").value("Objeto Descricao deve ser informado"))
+                .andExpect(jsonPath("$.detalhe[1]").value("Objeto FormaPagamento deve ser informado"))
+        ;
+    }
+
 }
