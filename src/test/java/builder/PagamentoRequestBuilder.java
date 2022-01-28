@@ -40,5 +40,10 @@ public class PagamentoRequestBuilder {
         return pagamentoRequest;
     }
 
+    public PagamentoRequestBuilder dataMalFormatada() {
+        pagamentoRequest.getTransacao().getDescricao().setDataHora("01-05-2021 18:30:00");
+        return this;
+    }
+
 
 }

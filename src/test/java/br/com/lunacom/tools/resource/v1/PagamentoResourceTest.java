@@ -142,7 +142,19 @@ public class PagamentoResourceTest {
     @Test
     @DisplayName("Deve impedir que seja informada Data e Hora diferente do padrão dd/MM/yyyy H:mm:ss")
     public void validarPadraoDeDataHora() throws Exception {
+        PagamentoRequest pagamentoRequest = PagamentoRequestBuilder
+                .umPagamento()
+                .dataMalFormatada()
+                .agora();
+        String json = objectMapper.writeValueAsString(pagamentoRequest);
 
+        MockHttpServletRequestBuilder request = Comuns.getMockHttpServletRequestBuilder(URL, json);
+
+        mvc
+                .perform(request)
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(jsonPath("$.mensagem").value("Verifique os seguintes itens antes de avançar"))
+                .andExpect(jsonPath("$.detalhe[0]").value("O campo data e hora deve estar no formato dd/mm/YYYY HH:mm:ss"));
     }
 
     @Test
