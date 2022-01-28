@@ -45,7 +45,8 @@ public class ControllerExceptionHandler {
         for (ObjectError x : e.getBindingResult().getAllErrors()) {
             list.add(String.format("%s", x.getDefaultMessage()));
         }
-        err.setDetalhe(list);
+        List<String> sortedList = list.stream().sorted().collect(Collectors.toList());
+        err.setDetalhe(sortedList);
         return err;
     }
 
