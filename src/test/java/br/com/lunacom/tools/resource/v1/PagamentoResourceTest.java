@@ -214,6 +214,29 @@ public class PagamentoResourceTest {
     @Test
     @DisplayName("Deve pesquisar por ID com sucesso")
     public void pesquisarPorId() throws Exception {
+        PagamentoEntity entity = PagamentoEntityBuilder.umPagamento().agora();
+        given(service.pesquisarPorId(any(Long.class)))
+                .willReturn(Optional.of(entity));
+        given(pagamentoEntityToResponseConverter.encode(any(PagamentoEntity.class)))
+                .willReturn(PagamentoResponseBuilder.umPagamento().agora());
+        final String pathVariable = "/1000235689000002";
+        MockHttpServletRequestBuilder request = Comuns.getMockHttpServletGetRequestBuilder(URL+pathVariable);
+
+        mvc
+                .perform(request)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.transacao.cartao").value("4465484984612312"))
+                .andExpect(jsonPath("$.transacao.id").value("1064654654565451L"))
+                .andExpect(jsonPath("$.transacao.descricao.valor").value("625.00"))
+                .andExpect(jsonPath("$.transacao.descricao.dataHora").value("01/08/2022 10:30:00"))
+                .andExpect(jsonPath("$.transacao.descricao.estabelecimento").value("Colégio Pinho"))
+                .andExpect(jsonPath("$.transacao.formaPagamento.tipo").value("AVISTA"))
+                .andExpect(jsonPath("$.transacao.formaPagamento.parcelas").value(5));
+    }
+
+    @Test
+    @DisplayName("Deve validar que o ID informado é um número")
+    public void deveValidarQueIdEhNumero() throws Exception {
 
     }
 
