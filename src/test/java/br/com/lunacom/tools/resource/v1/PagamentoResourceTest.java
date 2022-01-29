@@ -4,6 +4,7 @@ import br.com.lunacom.tools.converter.PagamentoEntityToResponseConverter;
 import br.com.lunacom.tools.domain.entity.PagamentoEntity;
 import br.com.lunacom.tools.domain.enumeration.StatusEnum;
 import br.com.lunacom.tools.domain.request.PagamentoRequest;
+import br.com.lunacom.tools.domain.response.PagamentoResponse;
 import br.com.lunacom.tools.repository.PagamentoRepository;
 import br.com.lunacom.tools.service.PagamentoService;
 import br.com.lunacom.tools.util.Comuns;
@@ -29,6 +30,8 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ValidationException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.BDDMockito.any;
@@ -265,7 +268,24 @@ public class PagamentoResourceTest {
     @Test
     @DisplayName("Deve retornar uma lista de Pagamentos ao consultar por Todos")
     public void deveRetornarUmaListaDePagamentos() throws Exception {
+        PagamentoEntity entity = PagamentoEntityBuilder.umPagamento().agora();
+        PagamentoResponse pagamentoResponse = PagamentoResponseBuilder.umPagamento().agora();
+        given(service.pesquisarTodos())
+                .willReturn(Arrays.asList(entity));
+        given(pagamentoEntityToResponseConverter.encode(any(List.class)))
+                .willReturn(Arrays.asList(pagamentoResponse));
+        MockHttpServletRequestBuilder request = Comuns.getMockHttpServletGetRequestBuilder(URL);
 
+        mvc
+                .perform(request)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].transacao.cartao").value("4465484984612312"))
+                .andExpect(jsonPath("$[0].transacao.id").value("1064654654565451L"))
+                .andExpect(jsonPath("$[0].transacao.descricao.valor").value("625.00"))
+                .andExpect(jsonPath("$[0].transacao.descricao.dataHora").value("01/08/2022 10:30:00"))
+                .andExpect(jsonPath("$[0].transacao.descricao.estabelecimento").value("Colégio Pinho"))
+                .andExpect(jsonPath("$[0].transacao.formaPagamento.tipo").value("AVISTA"))
+                .andExpect(jsonPath("$[0].transacao.formaPagamento.parcelas").value(5));
     }
 
 }
