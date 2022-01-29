@@ -1,6 +1,7 @@
 package br.com.lunacom.tools.service;
 
 import br.com.lunacom.tools.domain.entity.PagamentoEntity;
+import br.com.lunacom.tools.domain.enumeration.StatusEnum;
 import br.com.lunacom.tools.repository.DescricaoRepository;
 import br.com.lunacom.tools.repository.PagamentoRepository;
 import builder.PagamentoEntityBuilder;
@@ -12,6 +13,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.util.Optional;
 
 @ExtendWith(SpringExtension.class)
 public class PagamentoServiceTest {
@@ -43,7 +46,12 @@ public class PagamentoServiceTest {
     @Test
     @DisplayName("Deve estornar um pagamento")
     public void estornar() {
+        final PagamentoEntity pagamentoEntity = PagamentoEntityBuilder.umPagamento().agora();
+        Mockito.when(repository.findById(Mockito.any(Long.class)))
+                .thenReturn(Optional.of(pagamentoEntity));
 
+        PagamentoEntity response = service.estornar(1L);
+        Assertions.assertThat(response.getDescricao().getStatus()).isEqualTo(StatusEnum.CANCELADO);
     }
 
     @Test
