@@ -251,7 +251,15 @@ public class PagamentoResourceTest {
     @Test
     @DisplayName("Deve retornar No Content Quanto pesquisa por ID não encontrar registro")
     public void deveRetornarNoContentQuandoIdNaoForEncontrado() throws Exception {
+        PagamentoEntity entity = PagamentoEntityBuilder.umPagamento().agora();
+        given(service.pesquisarPorId(any(Long.class)))
+                .willReturn(Optional.empty());
+        final String pathVariable = "/1000235689000002";
+        MockHttpServletRequestBuilder request = Comuns.getMockHttpServletGetRequestBuilder(URL+pathVariable);
 
+        mvc
+                .perform(request)
+                .andExpect(status().isNoContent());
     }
 
     @Test
