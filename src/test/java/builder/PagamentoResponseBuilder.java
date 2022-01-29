@@ -1,6 +1,7 @@
 package builder;
 
 import br.com.lunacom.tools.domain.enumeration.FormaPagamentoEnum;
+import br.com.lunacom.tools.domain.enumeration.StatusEnum;
 import br.com.lunacom.tools.domain.response.DescricaoResponse;
 import br.com.lunacom.tools.domain.response.FormaPagamentoResponse;
 import br.com.lunacom.tools.domain.response.PagamentoResponse;
@@ -35,5 +36,10 @@ public class PagamentoResponseBuilder {
 
     public PagamentoResponse agora() {
         return pagamentoResponse;
+    }
+
+    public PagamentoResponseBuilder status(StatusEnum novoStatus) {
+        pagamentoResponse.getTransacao().getDescricao().setStatus(novoStatus);
+        return this;
     }
 }

@@ -13,4 +13,10 @@ public class Comuns {
                 .accept(MediaType.APPLICATION_JSON)
                 .content(json);
     }
+    public static MockHttpServletRequestBuilder getMockHttpServletPatchRequestBuilder(String url) {
+        return MockMvcRequestBuilders
+                .patch(url)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+    }
 }

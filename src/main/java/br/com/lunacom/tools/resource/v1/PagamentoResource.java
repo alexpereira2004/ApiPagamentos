@@ -53,7 +53,7 @@ public class PagamentoResource {
         PagamentoEntity entity = service.estornar(Long.valueOf(id));
         final PagamentoResponse response = pagamentoEntityToResponseConverter
                 .encode(entity);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
     }
 
     @GetMapping(value="/{id}")

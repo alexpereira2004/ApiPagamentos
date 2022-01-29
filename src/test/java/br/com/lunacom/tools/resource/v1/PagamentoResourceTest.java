@@ -2,6 +2,7 @@ package br.com.lunacom.tools.resource.v1;
 
 import br.com.lunacom.tools.converter.PagamentoEntityToResponseConverter;
 import br.com.lunacom.tools.domain.entity.PagamentoEntity;
+import br.com.lunacom.tools.domain.enumeration.StatusEnum;
 import br.com.lunacom.tools.domain.request.PagamentoRequest;
 import br.com.lunacom.tools.repository.PagamentoRepository;
 import br.com.lunacom.tools.service.PagamentoService;
@@ -175,7 +176,21 @@ public class PagamentoResourceTest {
     @Test
     @DisplayName("Deve realizar um estorno com sucesso")
     public void estornarComSucesso() throws Exception {
+        PagamentoEntity entity = PagamentoEntityBuilder.umPagamento().agora();
 
+        given(service.estornar(1000235689000005L))
+                .willReturn(entity);
+        given(pagamentoEntityToResponseConverter.encode(any(PagamentoEntity.class)))
+                .willReturn(PagamentoResponseBuilder.umPagamento().status(StatusEnum.CANCELADO).agora());
+        final String pathVariable = "/1000235689000005/estorno";
+        MockHttpServletRequestBuilder request = Comuns
+                .getMockHttpServletPatchRequestBuilder(URL+pathVariable);
+
+        mvc
+                .perform(request)
+                .andExpect(status().isAccepted())
+                .andExpect(jsonPath("$.transacao.descricao.status")
+                        .value("CANCELADO"));
     }
 
     @Test
