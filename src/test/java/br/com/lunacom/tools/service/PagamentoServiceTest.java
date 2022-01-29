@@ -5,7 +5,6 @@ import br.com.lunacom.tools.domain.enumeration.StatusEnum;
 import br.com.lunacom.tools.repository.DescricaoRepository;
 import br.com.lunacom.tools.repository.PagamentoRepository;
 import builder.PagamentoEntityBuilder;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,7 +13,11 @@ import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import javax.validation.ValidationException;
 import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 
 @ExtendWith(SpringExtension.class)
 public class PagamentoServiceTest {
@@ -40,7 +43,7 @@ public class PagamentoServiceTest {
                 .thenReturn(pagamentoEntity);
 
         PagamentoEntity response = service.salvar(pagamentoEntity);
-        Assertions.assertThat(response.getId()).isEqualTo(1064654654565451L);
+        assertThat(response.getId()).isEqualTo(1064654654565451L);
     }
 
     @Test
@@ -51,13 +54,20 @@ public class PagamentoServiceTest {
                 .thenReturn(Optional.of(pagamentoEntity));
 
         PagamentoEntity response = service.estornar(1L);
-        Assertions.assertThat(response.getDescricao().getStatus()).isEqualTo(StatusEnum.CANCELADO);
+        assertThat(response.getDescricao().getStatus()).isEqualTo(StatusEnum.CANCELADO);
     }
 
     @Test
     @DisplayName("Deve lançar exceção ao estornar um pagamento")
     public void estornarComExcecao() {
+        final PagamentoEntity pagamentoEntity = PagamentoEntityBuilder.umPagamento().agora();
+        Mockito.when(repository.findById(Mockito.any(Long.class)))
+                .thenReturn(Optional.empty());
 
+        Throwable exception = catchThrowable(() -> service.estornar(1L));
+        assertThat(exception)
+                .isInstanceOf(ValidationException.class)
+                .hasStackTraceContaining("Pagamento informado pelo id 1 não existe.");
     }
 
 }
