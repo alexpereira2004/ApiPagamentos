@@ -39,4 +39,17 @@ public class PagamentoServiceTest {
         PagamentoEntity response = service.salvar(pagamentoEntity);
         Assertions.assertThat(response.getId()).isEqualTo(1064654654565451L);
     }
+
+    @Test
+    @DisplayName("Deve estornar um pagamento")
+    public void estornar() {
+
+    }
+
+    @Test
+    @DisplayName("Deve lançar exceção ao estornar um pagamento")
+    public void estornarComExcecao() {
+
+    }
+
 }
