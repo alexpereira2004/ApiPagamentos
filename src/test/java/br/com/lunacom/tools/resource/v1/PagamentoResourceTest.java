@@ -197,8 +197,6 @@ public class PagamentoResourceTest {
     @Test
     @DisplayName("Deve lançar uma exceção quando o pagamento não for localizado")
     public void lancarExcecaoPorPagamentoNaoLocalizado() throws Exception {
-        PagamentoEntity entity = PagamentoEntityBuilder.umPagamento().agora();
-
         given(service.estornar(1000235689000005L))
                 .willThrow(new ValidationException("Pagamento informado pelo id 1000235689000005 não existe."));
 
