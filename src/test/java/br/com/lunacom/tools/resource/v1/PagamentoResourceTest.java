@@ -237,7 +237,15 @@ public class PagamentoResourceTest {
     @Test
     @DisplayName("Deve validar que o ID informado é um número")
     public void deveValidarQueIdEhNumero() throws Exception {
+        PagamentoEntity entity = PagamentoEntityBuilder.umPagamento().agora();
+        final String pathVariable = "/AbCd1E4G6iJ";
+        MockHttpServletRequestBuilder request = Comuns.getMockHttpServletGetRequestBuilder(URL+pathVariable);
 
+        mvc
+                .perform(request)
+                .andExpect(status().isPreconditionFailed())
+                .andExpect(jsonPath("$.mensagem").value("É necessário revisar a requisição"))
+                .andExpect(jsonPath("$.detalhe").value("pesquisarPorId.id value 'AbCd1E4G6iJ' Valor informado como ID não é válido"));
     }
 
     @Test
