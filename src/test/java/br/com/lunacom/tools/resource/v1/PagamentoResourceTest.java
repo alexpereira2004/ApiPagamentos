@@ -28,6 +28,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.ValidationException;
 import java.util.Optional;
 
 import static org.mockito.BDDMockito.any;
@@ -196,7 +197,20 @@ public class PagamentoResourceTest {
     @Test
     @DisplayName("Deve lançar uma exceção quando o pagamento não for localizado")
     public void lancarExcecaoPorPagamentoNaoLocalizado() throws Exception {
+        PagamentoEntity entity = PagamentoEntityBuilder.umPagamento().agora();
 
+        given(service.estornar(1000235689000005L))
+                .willThrow(new ValidationException("Pagamento informado pelo id 1000235689000005 não existe."));
+
+        final String pathVariable = "/1000235689000005/estorno";
+        MockHttpServletRequestBuilder request = Comuns
+                .getMockHttpServletPatchRequestBuilder(URL+pathVariable);
+
+        mvc
+                .perform(request)
+                .andExpect(status().isPreconditionFailed())
+                .andExpect(jsonPath("$.mensagem").value("Ocorreu este erro de validação"))
+                .andExpect(jsonPath("$.detalhe").value("Pagamento informado pelo id 1000235689000005 não existe."));
     }
 
     @Test

@@ -8,7 +8,7 @@ import br.com.lunacom.tools.util.RandomData;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.ws.rs.NotFoundException;
+import javax.validation.ValidationException;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,7 +28,7 @@ public class PagamentoService {
     public PagamentoEntity estornar(Long id) {
         Optional<PagamentoEntity> optional = repository.findById(id);
         if (optional.isEmpty()) {
-            throw new NotFoundException(String.format("Pagamento informado pelo id %s não existe.", id));
+            throw new ValidationException(String.format("Pagamento informado pelo id %s não existe.", id));
         }
 
         PagamentoEntity pagamentoEntity = optional.get();
